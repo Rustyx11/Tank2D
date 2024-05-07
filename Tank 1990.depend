@@ -1,0 +1,464 @@
+# depslib dependency file v1.0
+1621457020 source:c:\users\arek\desktop\tank 1990\main.c
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	"headers_files/engine.h"
+	"headers_files/player_and_enemies.h"
+	"headers_files/shooting.h"
+	"headers_files/map_management.h"
+	"headers_files/collisions.h"
+	"headers_files/main_menu.h"
+	"headers_files/animations.h"
+
+1618947466 source:c:\users\arek\desktop\tank 1990\libraries\player.c
+	"../headers/engine.h"
+
+1618947088 c:\users\arek\desktop\tank 1990\headers\player.h
+	"raylib.h"
+	"engine.h"
+
+1618991085 c:\users\arek\desktop\tank 1990\headers\engine.h
+
+1618949109 c:\users\arek\desktop\tank 1990\libraries\engine.h
+
+1618948189 c:\users\arek\desktop\tank 1990\libraries\player_enemies.h
+	"raylib.h"
+
+1618949359 source:c:\users\arek\desktop\tank 1990\libraries\player_enemies.c
+	"../headers/engine.h"
+	"../headers/player_enemies.h"
+
+1618949086 source:c:\users\arek\desktop\tank 1990\libraries\engine.c
+	"engine.h"
+
+1618949478 c:\users\arek\desktop\tank 1990\headers\player_enemies.h
+	"raylib.h"
+
+1618991441 c:\users\arek\desktop\tank 1990\headers\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+
+1618991811 source:c:\users\arek\desktop\tank 1990\libraries\player_and_enemies.c
+
+1618991085 c:\users\arek\desktop\tank 1990\headershhh\engine.h
+
+1618991441 c:\users\arek\desktop\tank 1990\headershhh\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+
+1621456836 source:c:\users\arek\desktop\tank 1990\libraries_files\player_and_enemies.c
+	"../headers_files/player_and_enemies.h"
+	<time.h>
+
+1621453823 c:\users\arek\desktop\tank 1990\headers_files\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+	"map_management.h"
+	"collisions.h"
+
+1621455452 c:\users\arek\desktop\tank 1990\headers_files\engine.h
+	"raylib.h"
+	<time.h>
+
+1619071888 source:c:\users\arek\desktop\tank 1990\libraries_files\engine.c
+	"../headers_files/engine.h"
+
+1621455238 source:c:\users\arek\desktop\tank 1990\libraries_files\shooting.c
+	"../headers_files/shooting.h"
+
+1621455226 c:\users\arek\desktop\tank 1990\headers_files\shooting.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+	"map_management.h"
+	"player_and_enemies.h"
+	"collisions.h"
+	"animations.h"
+
+1621262711 c:\users\arek\desktop\tank 1990\headers_files\map_management.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+
+1621262711 source:c:\users\arek\desktop\tank 1990\libraries_files\map_management.c
+	"../headers_files/map_management.h"
+
+1621455390 c:\users\arek\desktop\tank 1990\headers_files\collisions.h
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	"player_and_enemies.h"
+
+1621457275 source:c:\users\arek\desktop\tank 1990\libraries_files\collisions.c
+	"../headers_files/collisions.h"
+
+1621448341 source:c:\users\arek\desktop\tank 1990\libraries_files\main_menu.c
+	"../headers_files/main_menu.h"
+
+1621448045 c:\users\arek\desktop\tank 1990\headers_files\main_menu.h
+	"raylib.h"
+	"engine.h"
+
+1621275799 c:\users\arek\desktop\tank 1990\headers_files\animations.h
+	"raylib.h"
+	"engine.h"
+
+1621275691 source:c:\users\arek\desktop\tank 1990\libraries_files\animations.c
+	"../headers_files/animations.h"
+
+1621275691 source:c:\users\piotr\documents\c\tank_end\libraries_files\animations.c
+	"../headers_files/animations.h"
+
+1621275799 c:\users\piotr\documents\c\tank_end\headers_files\animations.h
+	"raylib.h"
+	"engine.h"
+
+1621724389 c:\users\piotr\documents\c\tank_end\headers_files\engine.h
+	"raylib.h"
+	<time.h>
+
+1621516645 source:c:\users\piotr\documents\c\tank_end\libraries_files\collisions.c
+	"../headers_files/collisions.h"
+
+1621455390 c:\users\piotr\documents\c\tank_end\headers_files\collisions.h
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	"player_and_enemies.h"
+
+1621262711 c:\users\piotr\documents\c\tank_end\headers_files\map_management.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+
+1621453823 c:\users\piotr\documents\c\tank_end\headers_files\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+	"map_management.h"
+	"collisions.h"
+
+1619071888 source:c:\users\piotr\documents\c\tank_end\libraries_files\engine.c
+	"../headers_files/engine.h"
+
+1621723181 source:c:\users\piotr\documents\c\tank_end\libraries_files\main_menu.c
+	"../headers_files/main_menu.h"
+
+1621714444 c:\users\piotr\documents\c\tank_end\headers_files\main_menu.h
+	"raylib.h"
+	"engine.h"
+
+1621262711 source:c:\users\piotr\documents\c\tank_end\libraries_files\map_management.c
+	"../headers_files/map_management.h"
+
+1621456836 source:c:\users\piotr\documents\c\tank_end\libraries_files\player_and_enemies.c
+	"../headers_files/player_and_enemies.h"
+	<time.h>
+
+1621455238 source:c:\users\piotr\documents\c\tank_end\libraries_files\shooting.c
+	"../headers_files/shooting.h"
+
+1621455226 c:\users\piotr\documents\c\tank_end\headers_files\shooting.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+	"map_management.h"
+	"player_and_enemies.h"
+	"collisions.h"
+	"animations.h"
+
+1621723812 source:c:\users\piotr\documents\c\tank_end\main.c
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	"headers_files/engine.h"
+	"headers_files/player_and_enemies.h"
+	"headers_files/shooting.h"
+	"headers_files/map_management.h"
+	"headers_files/collisions.h"
+	"headers_files/main_menu.h"
+	"headers_files/animations.h"
+	"headers_files/map_editor.h"
+	"libraries_files/map_editor.c"
+
+1621716476 c:\users\piotr\documents\c\tank_end\headers_files\map_editor.h
+
+1621723967 c:\users\piotr\documents\c\tank_end\libraries_files\map_editor.c
+	"../headers_files/map_editor.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/stat.h>
+
+1621275692 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\animations.c
+	"../headers_files/animations.h"
+
+1621275800 c:\users\arek\desktop\nowy folder\tank___\headers_files\animations.h
+	"raylib.h"
+	"engine.h"
+
+1621724390 c:\users\arek\desktop\nowy folder\tank___\headers_files\engine.h
+	"raylib.h"
+	<time.h>
+
+1621516646 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\collisions.c
+	"../headers_files/collisions.h"
+
+1621455392 c:\users\arek\desktop\nowy folder\tank___\headers_files\collisions.h
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	"player_and_enemies.h"
+
+1621262712 c:\users\arek\desktop\nowy folder\tank___\headers_files\map_management.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+
+1621453824 c:\users\arek\desktop\nowy folder\tank___\headers_files\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+	"map_management.h"
+	"collisions.h"
+
+1619071890 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\engine.c
+	"../headers_files/engine.h"
+
+1621724508 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\main_menu.c
+	"../headers_files/main_menu.h"
+
+1621714446 c:\users\arek\desktop\nowy folder\tank___\headers_files\main_menu.h
+	"raylib.h"
+	"engine.h"
+
+1621262712 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\map_management.c
+	"../headers_files/map_management.h"
+
+1621456838 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\player_and_enemies.c
+	"../headers_files/player_and_enemies.h"
+	<time.h>
+
+1621455240 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\shooting.c
+	"../headers_files/shooting.h"
+
+1621455228 c:\users\arek\desktop\nowy folder\tank___\headers_files\shooting.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+	"map_management.h"
+	"player_and_enemies.h"
+	"collisions.h"
+	"animations.h"
+
+1621751581 source:c:\users\arek\desktop\nowy folder\tank___\main.c
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	"headers_files/engine.h"
+	"headers_files/player_and_enemies.h"
+	"headers_files/shooting.h"
+	"headers_files/map_management.h"
+	"headers_files/collisions.h"
+	"headers_files/main_menu.h"
+	"headers_files/animations.h"
+	"headers_files/map_editor.h"
+
+1621749019 c:\users\arek\desktop\nowy folder\tank___\headers_files\map_editor.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	<sys/stat.h>
+
+1621723968 c:\users\arek\desktop\nowy folder\tank___\libraries_files\map_editor.c
+	"../headers_files/map_editor.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/stat.h>
+
+1621751490 source:c:\users\arek\desktop\nowy folder\tank___\libraries_files\map_editor.c
+	"../headers_files/map_editor.h"
+
+1621275692 source:c:\users\piotr\documents\c\tank___\libraries_files\animations.c
+	"../headers_files/animations.h"
+
+1621275800 c:\users\piotr\documents\c\tank___\headers_files\animations.h
+	"raylib.h"
+	"engine.h"
+
+1621724390 c:\users\piotr\documents\c\tank___\headers_files\engine.h
+	"raylib.h"
+	<time.h>
+
+1621516646 source:c:\users\piotr\documents\c\tank___\libraries_files\collisions.c
+	"../headers_files/collisions.h"
+
+1621455392 c:\users\piotr\documents\c\tank___\headers_files\collisions.h
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	"player_and_enemies.h"
+
+1621262712 c:\users\piotr\documents\c\tank___\headers_files\map_management.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+
+1621453824 c:\users\piotr\documents\c\tank___\headers_files\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+	"map_management.h"
+	"collisions.h"
+
+1619071890 source:c:\users\piotr\documents\c\tank___\libraries_files\engine.c
+	"../headers_files/engine.h"
+
+1621724508 source:c:\users\piotr\documents\c\tank___\libraries_files\main_menu.c
+	"../headers_files/main_menu.h"
+
+1621714446 c:\users\piotr\documents\c\tank___\headers_files\main_menu.h
+	"raylib.h"
+	"engine.h"
+
+1621770764 source:c:\users\piotr\documents\c\tank___\libraries_files\map_editor.c
+	"../headers_files/map_editor.h"
+
+1621749019 c:\users\piotr\documents\c\tank___\headers_files\map_editor.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	<sys/stat.h>
+
+1621262712 source:c:\users\piotr\documents\c\tank___\libraries_files\map_management.c
+	"../headers_files/map_management.h"
+
+1621456838 source:c:\users\piotr\documents\c\tank___\libraries_files\player_and_enemies.c
+	"../headers_files/player_and_enemies.h"
+	<time.h>
+
+1621455240 source:c:\users\piotr\documents\c\tank___\libraries_files\shooting.c
+	"../headers_files/shooting.h"
+
+1621455228 c:\users\piotr\documents\c\tank___\headers_files\shooting.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+	"map_management.h"
+	"player_and_enemies.h"
+	"collisions.h"
+	"animations.h"
+
+1621769337 source:c:\users\piotr\documents\c\tank___\main.c
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	"headers_files/engine.h"
+	"headers_files/player_and_enemies.h"
+	"headers_files/shooting.h"
+	"headers_files/map_management.h"
+	"headers_files/collisions.h"
+	"headers_files/main_menu.h"
+	"headers_files/animations.h"
+	"headers_files/map_editor.h"
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\animations.c
+	"../headers_files/animations.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\animations.h
+	"raylib.h"
+	"engine.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\engine.h
+	"raylib.h"
+	<time.h>
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\collisions.c
+	"../headers_files/collisions.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\collisions.h
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	"player_and_enemies.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\map_management.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\player_and_enemies.h
+	"raylib.h"
+	"engine.h"
+	"map_management.h"
+	"collisions.h"
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\engine.c
+	"../headers_files/engine.h"
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\main_menu.c
+	"../headers_files/main_menu.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\main_menu.h
+	"raylib.h"
+	"engine.h"
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\map_editor.c
+	"../headers_files/map_editor.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\map_editor.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"engine.h"
+	"raylib.h"
+	"map_management.h"
+	<sys/stat.h>
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\map_management.c
+	"../headers_files/map_management.h"
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\player_and_enemies.c
+	"../headers_files/player_and_enemies.h"
+	<time.h>
+
+1621772404 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\libraries_files\shooting.c
+	"../headers_files/shooting.h"
+
+1621772407 c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\headers_files\shooting.h
+	"raylib.h"
+	"engine.h"
+	<stdio.h>
+	"map_management.h"
+	"player_and_enemies.h"
+	"collisions.h"
+	"animations.h"
+
+1621772405 source:c:\users\nusty\desktop\studia\programowanie_main\projekt_tank\tank 1990v4\main.c
+	"raylib.h"
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<stdbool.h>
+	"headers_files/engine.h"
+	"headers_files/player_and_enemies.h"
+	"headers_files/shooting.h"
+	"headers_files/map_management.h"
+	"headers_files/collisions.h"
+	"headers_files/main_menu.h"
+	"headers_files/animations.h"
+	"headers_files/map_editor.h"
+

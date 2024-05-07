@@ -1,0 +1,227 @@
+#include "raylib.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define PLAYERWIDTH 18
+#define PLAYERHEIGHT 18
+#define NETSIZE_X 20
+#define NETSIZE_Y 12
+#define SIZE_OF_SQUARE 50
+
+enum ground_types
+{
+    EMPTY = 0,
+    GRASS,
+    DIRT,
+    WALL,
+};
+
+// przechowanie koordynatow czolgu
+struct coordinates
+{
+    int x, y;
+};
+
+struct tank_direction{
+    Image direction;
+};
+
+struct square
+{
+    int type_of_texture;
+    int x, y;
+    Texture2D field_texture;
+};
+
+
+void load_tank_textures(struct tank_direction *pozycje)
+{
+    Image temp = LoadImage("img/tank.png");
+    pozycje[0].direction = ImageFromImage(temp, (Rectangle){0, 0, PLAYERWIDTH , PLAYERHEIGHT});
+    pozycje[1].direction = ImageFromImage(temp, (Rectangle){18,0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[2].direction = ImageFromImage(temp, (Rectangle){36, 0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[3].direction = ImageFromImage(temp, (Rectangle){54, 0, PLAYERWIDTH , PLAYERHEIGHT});
+}
+
+void load_tank_texture(Image image, Texture2D *tank)
+{
+    *tank = LoadTextureFromImage(image);
+}
+
+int loadMapFromFile( struct square pola_siatki[][NETSIZE_X])  // funkcja laduje mape z pliku
+{
+    int i, j;
+    char c;
+    FILE *map = fopen("maps/map_1.txt", "r");
+    if(map != NULL)
+    {
+        for(i = 0; i < NETSIZE_Y; i++)
+            for(j = 0; j < NETSIZE_X; j++)
+            {
+                c = pola_siatki[i][j].type_of_texture = fgetc(map);
+                if(c != EOF)
+                {
+                    if(c != '\n')
+                        pola_siatki[i][j].type_of_texture = c - 48;
+                    else
+                        j--;
+
+                }
+                else
+                {
+                    pola_siatki[i][j].type_of_texture = EMPTY;
+                }
+
+            }
+        fclose(map);
+        return 1;
+    }
+
+    return 0;
+
+
+}
+
+void fillTheMap(struct square pola_siatki[][NETSIZE_X]) // funkcja dobiera textury do mapy, chyba jest szybciej jesli sie je bierze z jednego pliku(spritesheet)
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+    {
+        for(j = 0; j < NETSIZE_X; j++)
+        {
+
+            switch(pola_siatki[i][j].type_of_texture)
+            {
+            case EMPTY:
+                pola_siatki[i][j].field_texture = LoadTexture("img/empty_space.png");
+                break;
+            case GRASS:
+                pola_siatki[i][j].field_texture = LoadTexture("img/grass.png");
+                break;
+            case DIRT:
+                pola_siatki[i][j].field_texture = LoadTexture("img/empty_space.png"); // brak textury dirt.png
+                break;
+            case WALL:
+                pola_siatki[i][j].field_texture = LoadTexture("img/brick_wall.png");
+                break;
+            default:
+                pola_siatki[i][j].field_texture = LoadTexture("img/empty_space.png");
+                break;
+
+            }
+            pola_siatki[i][j].y = SIZE_OF_SQUARE * i;
+            pola_siatki[i][j].x = SIZE_OF_SQUARE * j;
+
+        }
+    }
+
+}
+
+void drawTheMap(struct square pola_siatki[][NETSIZE_X])
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+        for(j = 0; j < NETSIZE_X; j++)
+        DrawTexture(pola_siatki[i][j].field_texture, pola_siatki[i][j].x, pola_siatki[i][j].y, RAYWHITE);
+}
+
+void unloadMap(struct square pola_siatki[][NETSIZE_X])
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+        for(j = 0; j < NETSIZE_X; j++)
+            UnloadTexture(pola_siatki[i][j].field_texture);
+}
+
+
+
+int main(void)
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    struct coordinates position;
+    int i, speed = 5;
+    InitWindow(screenWidth, screenHeight, "Tanks 1990 in 2021 - Still good...");
+
+    struct square pola_siatki[NETSIZE_Y][NETSIZE_X];
+    if(!loadMapFromFile(pola_siatki))
+        return 0;
+    fillTheMap(pola_siatki);
+
+    position.x = position.y = 300; // koordynaty punktu spawnu i czolgu
+
+    struct tank_direction pozycje[4]; // ladowanie pozycji czolgu
+    load_tank_textures(pozycje);
+
+    Texture2D tank;
+    load_tank_texture(pozycje[0].direction, &tank);
+
+
+    Rectangle player = {position.x, position.y, (PLAYERWIDTH)/2, (PLAYERHEIGHT)/2};
+
+
+
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())        // Detect window close button or ESC key
+    {
+
+        // Poruszanie sie czolgu po mapie(usprawnione)
+         if(IsKeyDown(KEY_RIGHT))
+         {
+                position.x = player.x += speed;
+                if(IsKeyPressed(KEY_RIGHT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[2].direction, &tank);
+        }
+        if(IsKeyDown(KEY_LEFT))
+        {
+                position.x = player.x -= speed;
+                if(IsKeyPressed(KEY_LEFT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[1].direction, &tank);
+
+        }
+
+        if(IsKeyDown(KEY_UP))
+        {
+                position.y = player.y -= speed;
+                if(IsKeyPressed(KEY_UP) || (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[3].direction, &tank);
+        }
+         if(IsKeyDown(KEY_DOWN))
+        {
+                position.y = player.y += speed;
+                if(IsKeyPressed(KEY_DOWN)|| (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[0].direction, &tank);
+        }
+
+
+
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        //DrawRectangleRec(player, BLUE);
+        drawTheMap(pola_siatki);
+        DrawTextureEx(tank, (Vector2){position.x, position.y},0, 3, RAYWHITE);
+        //DrawRectangleRec(player, BLUE);
+
+        EndDrawing();
+
+
+
+    //--------------------------------------------------------------------------------------
+    }
+    for(i = 0; i < 4; i++)
+        UnloadImage(pozycje[i].direction);
+    unloadMap(pola_siatki);
+    UnloadTexture(tank);
+   // UnloadTexture(tank_part2);
+    CloseWindow();
+    return 0;
+}

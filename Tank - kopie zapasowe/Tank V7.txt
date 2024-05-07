@@ -1,0 +1,355 @@
+#include "raylib.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define PLAYERWIDTH 45
+#define PLAYERHEIGHT 45
+#define NETSIZE_X 20
+#define NETSIZE_Y 12
+#define SIZE_OF_SQUARE 50
+
+int speed = 3; // predkosc czolgu -----------------------------------------------------
+
+// typ wyliczeniowy przyporzadkowywujacy liczbe dla danej textury
+enum ground_types
+{
+    EMPTY = 0,
+    GRASS,
+    DIRT,
+    WALL,
+};
+
+// przechowanie koordynatow czolgu
+struct coordinates
+{
+    int x, y;
+};
+
+// struktura przechowywujaca texture z kierunkiem czolgu
+struct tank_direction{
+    Image direction;
+};
+
+// struktura przechowywujaca informacje o pojedynczym elemencie siatki mapy
+struct square
+{
+    int type_of_texture;        // zmienna przechowuja liczbe odpowiadajaca typowi textury dla danego kwadratu (np 1 - GRASS)
+    int x, y;                   // polozenie kwadratu
+    Texture2D field_texture;    // zmienna przechowywujaca texture dla kwadratu
+};
+
+// funkcja wczytuje textury pozycji czaolgu do tablicy 4 - elementowej, ktora bedzie je przechowywac
+void load_tank_textures(struct tank_direction *pozycje)
+{
+    Image temp = LoadImage("img/tank.png");
+    pozycje[0].direction = ImageFromImage(temp, (Rectangle){0, 0, PLAYERWIDTH , PLAYERHEIGHT});
+    pozycje[1].direction = ImageFromImage(temp, (Rectangle){45,0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[2].direction = ImageFromImage(temp, (Rectangle){90, 0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[3].direction = ImageFromImage(temp, (Rectangle){135, 0, PLAYERWIDTH , PLAYERHEIGHT});
+}
+// funkcja wczytuje pozycje czolgu
+void load_tank_texture(Image image, Texture2D *tank)
+{
+    *tank = LoadTextureFromImage(image);
+}
+// funkcja wczytuje dane o mapie z pliku
+int loadMapFromFile( struct square pola_siatki[][NETSIZE_X])  // funkcja laduje mape z pliku
+{
+    int i, j;
+    char c;
+    FILE *map = fopen("maps/map_1.txt", "r");
+    if(map != NULL)
+    {
+        for(i = 0; i < NETSIZE_Y; i++)
+            for(j = 0; j < NETSIZE_X; j++)
+            {
+                c = pola_siatki[i][j].type_of_texture = fgetc(map);
+                if(c != EOF)
+                {
+                    if(c != '\n')
+                        pola_siatki[i][j].type_of_texture = c - 48;
+                    else
+                        j--;
+
+                }
+                else
+                {
+                    pola_siatki[i][j].type_of_texture = EMPTY;
+                }
+
+            }
+        fclose(map);
+        return 1;
+    }
+
+    return 0;
+
+
+}
+ // funkcja dobiera textury do mapy
+void fillTheMap(struct square pola_siatki[][NETSIZE_X])
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+    {
+        for(j = 0; j < NETSIZE_X; j++)
+        {
+
+            switch(pola_siatki[i][j].type_of_texture)
+            {
+            case EMPTY:
+                pola_siatki[i][j].field_texture = LoadTexture("img/empty_space.png");
+                break;
+            case GRASS:
+                pola_siatki[i][j].field_texture = LoadTexture("img/grass.png");
+                break;
+            case DIRT:
+                pola_siatki[i][j].field_texture = LoadTexture("img/dirt.png");
+                break;
+            case WALL:
+                pola_siatki[i][j].field_texture = LoadTexture("img/brick_wall.png");
+                break;
+            default:
+                pola_siatki[i][j].field_texture = LoadTexture("img/empty_space.png");
+                break;
+
+            }
+            pola_siatki[i][j].y = SIZE_OF_SQUARE * i;
+            pola_siatki[i][j].x = SIZE_OF_SQUARE * j;
+
+        }
+    }
+
+}
+// funkcja rysuje mape na ekranie
+void drawTheMap(struct square pola_siatki[][NETSIZE_X])
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+        for(j = 0; j < NETSIZE_X; j++)
+        DrawTexture(pola_siatki[i][j].field_texture, pola_siatki[i][j].x, pola_siatki[i][j].y, RAYWHITE);
+}
+// funkcja okresla granice mapy za ktore czolg nie moze wyjechac
+void setBorders(struct coordinates *position, Rectangle *player)
+{
+    if(position -> x > 1000 - PLAYERWIDTH) position -> x = player-> x =  1000 - PLAYERWIDTH;
+    if(position -> y > 600 - PLAYERHEIGHT) position -> y = player -> y = 600 - PLAYERWIDTH;
+    if(position -> x < 0)                  position -> x = player -> x = 0;
+    if(position -> y < 0)                  position -> y = player -> y = 0;
+
+}
+
+// funkcja rysuje granice mapy na ekranie
+void drawTheBorders()
+{
+    DrawRectangle(0,0,1000,5,YELLOW);
+    DrawRectangle(0,600,1000,5,YELLOW);
+    DrawRectangle(0,0,5,600,YELLOW);
+    DrawRectangle(1000,0,5,600,YELLOW);
+    return;
+}
+// funkcja usuwa textury mapy z pamieci RAM
+void unloadMap(struct square pola_siatki[][NETSIZE_X])      // usuniecie textur mapy z pamieci RAM
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+        for(j = 0; j < NETSIZE_X; j++)
+            UnloadTexture(pola_siatki[i][j].field_texture);
+}
+// funkcja okresla ile scian jest na mapie
+int howManyWalls(struct square pola_siatki[][NETSIZE_X], int walls_number)
+{
+    int i, j;
+    for(i = 0; i < NETSIZE_Y; i++)
+    {
+        for(j = 0; j < NETSIZE_X; j++)
+        {
+            if(pola_siatki[i][j].type_of_texture == WALL)
+                walls_number++;
+        }
+    }
+    return walls_number;
+}
+// funkcja tworzy modele kolizyjne scian
+void createWallsColisionModels(Rectangle *walls, struct square pola_siatki[][NETSIZE_X])
+{
+    int i, j, licznik = 0;
+    for(i = 0; i < NETSIZE_Y; i++)
+    {
+        for(j = 0; j < NETSIZE_X; j++)
+        {
+            if(pola_siatki[i][j].type_of_texture == WALL)
+            {
+                walls[licznik].x = pola_siatki[i][j].x;
+                walls[licznik].y = pola_siatki[i][j].y;
+                walls[licznik].width = walls[licznik].height = SIZE_OF_SQUARE;
+                licznik++;
+            }
+        }
+    }
+}
+
+
+// funkcja rysuje modele kolizyjne scian (funkcja pomocnicza)
+void drawWallsColisionModels(Rectangle *walls, int walls_number)
+{
+    int i;
+    for(i = 0; i < walls_number; i++)
+        DrawRectangle(walls[i].x, walls[i].y, walls[i].width, walls[i].height, BLUE);
+}
+// funkcja wykrywa kolizje z gory
+bool AAbb_up(Rectangle *walls, int walls_number, Rectangle player)
+{
+    int i;
+    for(i = 0; i < walls_number; i++)
+    {
+        if(player.x + PLAYERWIDTH - speed > walls[i].x && player.x + speed < walls[i].x + walls[i].width
+           && player.y + PLAYERHEIGHT - speed > walls[i].y && player.y  <= walls[i].y + walls[i].height)
+            return true;
+    }
+    return false; // brak kolizji
+}
+// funkcja wykrywa kolizje z dolu
+bool AAbb_down(Rectangle *walls, int walls_number, Rectangle player)
+{
+    int i;
+    for(i = 0; i < walls_number; i++)
+    {
+        if(player.x + PLAYERWIDTH - speed > walls[i].x && player.x + speed < walls[i].x + walls[i].width
+           && player.y + PLAYERHEIGHT >= walls[i].y && player.y + speed < walls[i].y + walls[i].height)
+            return true;
+    }
+    return false; // brak kolizji
+}
+// funkcja wykrywa kolizje z prawej strony
+bool AAbb_right(Rectangle *walls, int walls_number, Rectangle player)
+{
+    int i;
+    for(i = 0; i < walls_number; i++)
+    {
+        if(player.x + PLAYERWIDTH >= walls[i].x && player.x + speed < walls[i].x + walls[i].width
+           && player.y + PLAYERHEIGHT - speed > walls[i].y && player.y + speed < walls[i].y + walls[i].height)
+            return true;
+    }
+    return false; // brak kolizji
+}
+// funkcja wykrywa kolizje z lewej strony
+bool AAbb_left(Rectangle *walls, int walls_number, Rectangle player)
+{
+    int i;
+    for(i = 0; i < walls_number; i++)
+    {
+        if(player.x + PLAYERWIDTH - speed > walls[i].x && player.x <= walls[i].x + walls[i].width
+           && player.y + PLAYERHEIGHT - speed > walls[i].y && player.y + speed < walls[i].y + walls[i].height)
+            return true;
+    }
+    return false; // brak kolizji
+}
+
+
+
+
+
+int main(void)
+{
+    // Inicjacja
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    struct coordinates position;
+    int i;
+    int walls_number = 0;                                       // zmienna przechowujaca informacjie o liczbie scian w grze
+    InitWindow(screenWidth, screenHeight, "Tanks 1990 in 2021 - Still good...");
+
+    struct square pola_siatki[NETSIZE_Y][NETSIZE_X];            // tworzenie siatki mapy
+    if(!loadMapFromFile(pola_siatki))                           // ladowanie mapy z pliku
+        return 0;
+    fillTheMap(pola_siatki);                                    // przypisywanie tekstur do kwadratow mapy
+    walls_number = howManyWalls(pola_siatki, walls_number);     // zliczenie ilosci scian na mapie
+    Rectangle walls[walls_number];                              // tworzenie tablicy modeli kolizyjnych scian
+    createWallsColisionModels(walls, pola_siatki);              // tworzenie modeli kolizyjnych scian
+
+
+    position.x = position.y = 320;                              // koordynaty punktu poczatkowego czolgu
+
+    struct tank_direction pozycje[4];                           // tworzenie struktury przechowujace textury pozycji czolgu
+    load_tank_textures(pozycje);                                // zaladowanie do struktury grafik pozycji czolgu
+
+    Texture2D tank;                                             // tworzenie zmiennej przechowujacej aktualna texture czolgu
+    load_tank_texture(pozycje[0].direction, &tank);             // ladowanie poczatkowej pozycji czolgu
+
+
+
+
+    Rectangle player = {position.x, position.y, PLAYERWIDTH, PLAYERHEIGHT}; // tworzenie modelu kolizijnego gracza
+
+
+
+
+
+    SetTargetFPS(60);                   // Ustawienie limitu 60 klatek
+    //--------------------------------------------------------------------------------------
+
+    // Glowna petla gry
+    while (!WindowShouldClose())        // Okno gry bedzie otwarte do czasu nacisniecia klawisza ESC lub przycisku zamykajacego okno
+    {
+
+
+
+        // Poruszanie sie czolgu po mapie
+        if(IsKeyDown(KEY_RIGHT) && !AAbb_right(walls, walls_number, player))                        // ruch w prawo
+        {
+                position.x = player.x += speed;
+                if(IsKeyPressed(KEY_RIGHT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[2].direction, &tank);
+        }
+        if(IsKeyDown(KEY_LEFT) && !AAbb_left(walls, walls_number, player))                          // ruch w lewo
+        {
+                position.x = player.x -= speed;
+                if(IsKeyPressed(KEY_LEFT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[1].direction, &tank);
+        }
+        if(IsKeyDown(KEY_UP) && !AAbb_up(walls, walls_number, player))                              // ruch w gore
+        {
+                position.y = player.y -= speed;
+                if(IsKeyPressed(KEY_UP) || (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[3].direction, &tank);
+        }
+        if(IsKeyDown(KEY_DOWN) && !AAbb_down(walls, walls_number, player))                          // ruch w dol
+        {
+                position.y = player.y += speed;
+                if(IsKeyPressed(KEY_DOWN)|| (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[0].direction, &tank);
+        }
+        //---------------------------------------------------------------------
+        // okreslenie granic mapy za ktore czolg nie moze wyjechac
+        setBorders(&position, &player);
+
+
+
+
+
+        BeginDrawing();                 // rysowanie obiektow
+
+        ClearBackground(BLACK);                                                 // nadanie koloru czarnego dla tla
+        drawTheMap(pola_siatki);                                                // wywowalnie funkcji rysujacej mape
+        drawTheBorders();                                                       // wywolanie funkcji rysujacej granice mapy
+        DrawTextureEx(tank, (Vector2){position.x, position.y},0, 1, RAYWHITE);  // rysowanie textury czolgu
+        DrawFPS(1200,0);                                                        // wypisywanie na ekranie wartosci FPS
+        DrawText(TextFormat("x = %d", position.x), 1200, 20, 20, RED);          // wypisywanie na ekranie pozycji x czolgu
+        DrawText(TextFormat("y = %d", position.y), 1200, 40, 20, RED);          // wypisywanie na ekranie pozycji y czolgu
+
+        EndDrawing();                   // koniec rysowania obiektow
+
+
+
+    //--------------------------------------------------------------------------------------
+    }
+    for(i = 0; i < 4; i++)
+        UnloadImage(pozycje[i].direction);
+    unloadMap(pola_siatki);
+    UnloadTexture(tank);
+    CloseWindow();
+    return 0;
+}

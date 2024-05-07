@@ -1,0 +1,170 @@
+#include "raylib.h"
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define PLAYERWIDTH 150
+#define PLAYERHEIGHT 150
+#define NUMBER_OF_WALLS 1
+
+// przechowanie koordynatow czolgu
+struct coordinates
+{
+    int x, y;
+};
+
+struct tank_direction{
+    Image direction;
+};
+
+struct wall{
+    float x;
+    float y;
+    float width;
+    float height;
+};
+
+void drawWall(struct wall *walls){
+    int i;
+    for(i = 0; i < NUMBER_OF_WALLS; i++){
+        DrawRectangle(walls[i].x, walls[i].y, walls[i].width, walls[i].height, GREEN);
+    }
+}
+
+void load_tank_textures(struct tank_direction *pozycje)
+{
+    Image temp = LoadImage("tank2.png");
+    pozycje[0].direction = ImageFromImage(temp, (Rectangle){0, 0, PLAYERWIDTH , PLAYERHEIGHT});
+    pozycje[1].direction = ImageFromImage(temp, (Rectangle){150,0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[2].direction = ImageFromImage(temp, (Rectangle){300, 0, PLAYERHEIGHT , PLAYERWIDTH});
+    pozycje[3].direction = ImageFromImage(temp, (Rectangle){450, 0, PLAYERWIDTH , PLAYERHEIGHT});
+}
+
+void load_tank_texture(Image image, Texture2D *tank)
+{
+    *tank = LoadTextureFromImage(image);
+}
+
+
+bool isColide(Rectangle *wallTest, Rectangle player)
+{
+    if(player.x > wallTest[0].x + wallTest[0].width || player.x + PLAYERWIDTH/2 < wallTest[0].x
+       || player.y > wallTest[0].y + wallTest[0].height || player.y + PLAYERHEIGHT/2 < wallTest[0].y)
+        return false;
+
+    return true;
+}
+bool isOver(Rectangle *wallTest, Rectangle player) // czy kolizja jest z gory?
+{
+    if(player.y + PLAYERHEIGHT/2 > wallTest[0].y) // jezeli lewy dolny rog gracza jest mniejszy(wiekszy) niz gorna granica sciany sciany **
+        return true;
+    return false;
+}
+bool isUnder(Rectangle *wallTest, Rectangle player)
+{
+    if(player.y < wallTest[0].y + wallTest[0].height)  // jezeli lewy gorny gor gracza jest wieszky(mniejszy) niz dolna granica sciany to jest pod nia (**)
+        return true;
+    return false;
+}
+bool isOnRight(Rectangle *wallTest, Rectangle player)// czy kolizja jest z prawej strony?
+{
+    if(player.x < wallTest[0].x + wallTest[0].width) // jezeli lewa sciana gracza jest mniejsza(wieksza) niz lewa sciana plus jej dlugosc to gracz jest z prawej strony
+        return true;
+    return false;
+}
+bool isOnLeft(Rectangle *wallTest, Rectangle player)
+{
+    if(player.x + PLAYERWIDTH < wallTest[0].x) // jezeli prawa sciana gracza jest mniejsza niz lewa sciana to gracz jest z lewej strony
+        return true;
+    return false;
+}
+
+
+int main(void)
+{
+    // Initialization
+    //--------------------------------------------------------------------------------------
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    struct coordinates position;
+    int i, speed = 5;
+    InitWindow(screenWidth, screenHeight, "Tanks 1990 in 2021 - Still good...");
+    struct tank_direction pozycje[4];
+
+    position.x = position.y = 300; // koordynaty punktu spawnu i czolgu
+    load_tank_textures(pozycje);
+    Texture2D tank;
+    load_tank_texture(pozycje[0].direction, &tank);
+    struct wall walls[] = {{ 200,0, 50, 500 }};
+    Rectangle wallTest[] = {{200,0, 50, 500}};
+
+    Rectangle player = {position.x, position.y, (PLAYERWIDTH)/2, (PLAYERHEIGHT)/2};
+
+
+
+
+    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())        // Detect window close button or ESC key
+    {
+
+        // Poruszanie sie czolgu po mapie(usprawnione)
+         if(IsKeyDown(KEY_RIGHT))
+         {
+             if((!isColide(wallTest, player)) ||(isColide(wallTest, player) && !isOnRight(wallTest, player)))
+             {
+                position.x = player.x += speed;
+                if(IsKeyPressed(KEY_RIGHT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[1].direction, &tank);
+             }
+        }
+        if(IsKeyDown(KEY_LEFT))
+        {
+            if((!isColide(wallTest, player)) ||(isColide(wallTest, player) && !isOnLeft(wallTest, player)))
+            {
+                position.x = player.x -= speed;
+                if(IsKeyPressed(KEY_LEFT) || (IsKeyReleased(KEY_UP) || IsKeyReleased(KEY_DOWN)))
+                    load_tank_texture(pozycje[3].direction, &tank);
+            }
+
+        }
+
+        if(IsKeyDown(KEY_UP) && (isColide(wallTest, player) == false))
+        {
+                position.y = player.y -= speed;
+                if(IsKeyPressed(KEY_UP) || (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[2].direction, &tank);
+        }
+         if(IsKeyDown(KEY_DOWN) && (isColide(wallTest, player) == false))
+        {
+                position.y = player.y += speed;
+                if(IsKeyPressed(KEY_DOWN)|| (IsKeyReleased(KEY_RIGHT) || IsKeyReleased(KEY_LEFT)))
+                    load_tank_texture(pozycje[0].direction, &tank);
+        }
+
+
+
+
+        BeginDrawing();
+
+        ClearBackground(BLACK);
+
+        drawWall(walls);
+        //DrawRectangleRec(player, BLUE);
+        DrawTextureEx(tank, (Vector2){position.x, position.y},0, 0.5, RAYWHITE);
+        //DrawRectangleRec(player, BLUE);
+
+        EndDrawing();
+
+
+
+    //--------------------------------------------------------------------------------------
+    }
+    for(i = 0; i < 4; i++)
+        UnloadImage(pozycje[i].direction);
+    UnloadTexture(tank);
+   // UnloadTexture(tank_part2);
+    CloseWindow();
+    return 0;
+}
